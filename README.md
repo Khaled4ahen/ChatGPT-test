@@ -6,6 +6,7 @@ This repository contains example HTML files.
 Open `portfolio.html` in a web browser to view the sample portfolio page.
 
 ## Weekly Earnings Analyzer
+z0vx7n-codex/build-web-app-for-weekly-earnings-analysis
 The `index.html` page lets you upload a CSV and generate a weekly report.
 
 ### Running the analyzer
@@ -24,3 +25,6 @@ The `index.html` page lets you upload a CSV and generate a weekly report.
    Then visit `http://localhost:8000/index.html`.
 3. Upload your CSV, choose any date within the desired week, and click **Analyze**.
 4. The app displays each day from Tuesday to Monday and a yellow "WEEK TOTAL" row summarizing the results.
+
+Open `index.html` in a browser to analyze weekly earnings from a CSV file. Upload your `Pending_Payouts.csv`, select a starting date, and click **Analyze** to see the report.
+ master
