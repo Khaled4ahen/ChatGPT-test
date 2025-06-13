@@ -1,6 +1,6 @@
 body {
-  font-family: Arial, sans-serif;
-  background: #f4f6f8;
+  font-family: "Segoe UI", Tahoma, sans-serif;
+  background: linear-gradient(#e3f2fd, #fff);
   margin: 0;
   padding: 0;
 }
@@ -11,6 +11,12 @@ body {
   padding: 20px;
   background: #fff;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  border-radius: 8px;
+}
+
+h1 {
+  text-align: center;
+  color: #333;
 }
 
 .controls {
@@ -30,6 +36,7 @@ button {
   border: none;
   color: white;
   cursor: pointer;
+  border-radius: 4px;
 }
 
 button:hover {
@@ -45,6 +52,16 @@ button:hover {
   border: 1px solid #ddd;
   padding: 8px;
   text-align: center;
+}
+
+#results tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.future-row {
+  background-color: #f0f0f0;
+  color: #777;
+  font-style: italic;
 }
 
 #results th {

@@ -26,6 +26,8 @@ function analyze(csvData, startDate) {
   const diff = (day + 7 - 2) % 7; // difference to Tuesday
   const weekStart = new Date(start);
   weekStart.setDate(start.getDate() - diff);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
 
   const days = [];
   for (let i = 0; i < 7; i++) {
@@ -57,7 +59,7 @@ function analyze(csvData, startDate) {
     }
   });
 
-  return { weekStart, days };
+  return { weekStart, days, today };
 }
 
 function renderTable(result) {
@@ -77,10 +79,14 @@ function renderTable(result) {
   result.days.forEach(d => {
     const tr = document.createElement('tr');
     const combined = d.prepay + d.overtime;
-    totals.prepay += d.prepay;
-    totals.overtime += d.overtime;
-    totals.payout += d.payout;
-    totals.tasks += d.tasks;
+    if (d.date <= result.today) {
+      totals.prepay += d.prepay;
+      totals.overtime += d.overtime;
+      totals.payout += d.payout;
+      totals.tasks += d.tasks;
+    } else {
+      tr.classList.add('future-row');
+    }
 
     const cells = [
       d.date.toDateString(),

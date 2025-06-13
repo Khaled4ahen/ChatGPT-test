@@ -6,7 +6,7 @@ This repository contains example HTML files.
 Open `portfolio.html` in a web browser to view the sample portfolio page.
 
 ## Weekly Earnings Analyzer
-z0vx7n-codex/build-web-app-for-weekly-earnings-analysis
+4. The app shows each day from Tuesday to Monday. Any days beyond today are greyed out and excluded from the summary. A yellow "WEEK TOTAL" row summarizes the results.
 The `index.html` page lets you upload a CSV and generate a weekly report.
 
 ### Running the analyzer
