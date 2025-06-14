@@ -27,12 +27,35 @@ function formatDateUTC(date) {
 }
 
 
+function getField(obj, key) {
+  if (!obj) return undefined;
+  if (obj[key] !== undefined) return obj[key];
+  const target = key.toLowerCase();
+  for (const k in obj) {
+    if (k.trim().toLowerCase() === target) return obj[k];
+  }
+  return undefined;
+}
+
+
+
 function parseWorkDate(str) {
-  if (!str) return null;
-  const [day, mon, year] = str.split('-');
-  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  const idx = months.findIndex(m => m.toLowerCase() === mon.toLowerCase());
-  if (idx === -1) return new Date(str); // fallback
+  if (!str) return new Date(NaN);
+  const parts = String(str).trim().split(/[-\/]/);
+  if (parts.length < 3) return new Date(NaN);
+  let [day, mon, year] = parts;
+  if (day.length > 2) {
+    // handle year-month-day
+    [year, mon, day] = parts;
+  }
+  const months = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
+  let idx;
+  if (/^\d+$/.test(mon)) {
+    idx = parseInt(mon, 10) - 1;
+  } else {
+    idx = months.indexOf(mon.slice(0,3).toLowerCase());
+  }
+  if (idx < 0 || idx > 11) return new Date(NaN);
   const yr = parseInt(year, 10);
   const fullYear = yr < 100 ? 2000 + yr : yr;
   return new Date(Date.UTC(fullYear, idx, parseInt(day, 10)));
@@ -62,21 +85,21 @@ function analyze(csvData, startDate) {
   }
 
   csvData.forEach(row => {
-
-    const d = parseWorkDate(row.workDate);
-
-
+    const dateStr = getField(row, 'workDate');
+    const d = parseWorkDate(dateStr);
     const idx = Math.floor((d - weekStart) / (24 * 3600 * 1000));
     if (idx >= 0 && idx < 7) {
       const dayObj = days[idx];
-      const duration = parseDuration(row.duration);
-      if (row.payType === 'prepay') {
+      const duration = parseDuration(getField(row, 'duration'));
+      const payType = (getField(row, 'payType') || '').toLowerCase();
+      if (payType === 'prepay') {
         dayObj.prepay += duration;
         dayObj.tasks += 1;
-      } else if (row.payType === 'overtimePay') {
+      } else if (payType === 'overtimepay') {
         dayObj.overtime += duration;
       }
-      const payout = parseFloat(row.payout.replace(/[$]/g, ''));
+      const payoutVal = getField(row, 'payout') || '0';
+      const payout = parseFloat(String(payoutVal).replace(/[$]/g, ''));
       if (!isNaN(payout)) dayObj.payout += payout;
     }
   });
