@@ -45,12 +45,14 @@ function getField(obj, key) {
 
 function parseWorkDate(str) {
   if (!str) return new Date(NaN);
+
   const cleaned = String(str).replace(/,/g, ' ').trim();
   let d = new Date(cleaned);
   if (!isNaN(d)) {
     return new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
   }
   const parts = cleaned.split(/[-\/\s]+/);
+
   if (parts.length < 3) return new Date(NaN);
   let [day, mon, year] = parts;
   if (day.length > 2) {
