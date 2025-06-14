@@ -22,6 +22,7 @@ function formatCurrency(num) {
   return `$${num.toFixed(2)}`;
 }
 
+
 function parseWorkDate(str) {
   if (!str) return null;
   const [day, mon, year] = str.split('-');
@@ -40,10 +41,13 @@ function analyze(csvData, startDate) {
   const weekStart = new Date(start);
   weekStart.setUTCDate(start.getUTCDate() - diff);
 
+
   const days = [];
   for (let i = 0; i < 7; i++) {
     const date = new Date(weekStart);
+
     date.setUTCDate(weekStart.getUTCDate() + i);
+
     days.push({
       date,
       prepay: 0,
@@ -54,7 +58,10 @@ function analyze(csvData, startDate) {
   }
 
   csvData.forEach(row => {
+
     const d = parseWorkDate(row.workDate);
+
+
     const idx = Math.floor((d - weekStart) / (24 * 3600 * 1000));
     if (idx >= 0 && idx < 7) {
       const dayObj = days[idx];
