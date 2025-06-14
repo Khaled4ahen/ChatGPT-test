@@ -26,10 +26,22 @@ function formatDateUTC(date) {
   return date.toISOString().split('T')[0];
 }
 
+function getField(obj, key) {
+  if (!obj) return undefined;
+  if (obj[key] !== undefined) return obj[key];
+  const lower = key.toLowerCase();
+  for (const k in obj) {
+    if (k.toLowerCase() === lower) return obj[k];
+  }
+  return undefined;
+}
+
 
 function parseWorkDate(str) {
-  if (!str) return null;
-  const [day, mon, year] = str.split('-');
+  if (!str) return new Date(NaN);
+  const parts = String(str).trim().split('-');
+  if (parts.length !== 3) return new Date(str);
+  const [day, mon, year] = parts;
   const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   const idx = months.findIndex(m => m.toLowerCase() === mon.toLowerCase());
   if (idx === -1) return new Date(str); // fallback
@@ -62,21 +74,21 @@ function analyze(csvData, startDate) {
   }
 
   csvData.forEach(row => {
-
-    const d = parseWorkDate(row.workDate);
-
-
+    const dateStr = getField(row, 'workDate');
+    const d = parseWorkDate(dateStr);
     const idx = Math.floor((d - weekStart) / (24 * 3600 * 1000));
     if (idx >= 0 && idx < 7) {
       const dayObj = days[idx];
-      const duration = parseDuration(row.duration);
-      if (row.payType === 'prepay') {
+      const duration = parseDuration(getField(row, 'duration'));
+      const payType = (getField(row, 'payType') || '').toLowerCase();
+      if (payType === 'prepay') {
         dayObj.prepay += duration;
         dayObj.tasks += 1;
-      } else if (row.payType === 'overtimePay') {
+      } else if (payType === 'overtimepay') {
         dayObj.overtime += duration;
       }
-      const payout = parseFloat(row.payout.replace(/[$]/g, ''));
+      const payoutVal = getField(row, 'payout') || '0';
+      const payout = parseFloat(String(payoutVal).replace(/[$]/g, ''));
       if (!isNaN(payout)) dayObj.payout += payout;
     }
   });
