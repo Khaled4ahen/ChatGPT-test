@@ -6,8 +6,7 @@ This repository contains example HTML files.
 Open `portfolio.html` in a web browser to view the sample portfolio page.
 
 ## Weekly Earnings Analyzer
-z0vx7n-codex/build-web-app-for-weekly-earnings-analysis
-The `index.html` page lets you upload a CSV and generate a weekly report.
+The `index.html` page now uses React to analyze weekly earnings from a CSV file.
 
 ### Running the analyzer
 
@@ -16,15 +15,12 @@ The `index.html` page lets you upload a CSV and generate a weekly report.
    - `payType` – `prepay` or `overtimePay`
    - `duration` – time spent such as `1h 30m`
    - `payout` – amount in USD (e.g. `$7.50`)
-2. Open `index.html` in a web browser. If your browser restricts local files, you can start a quick server:
+2. Start a local server in this directory. With Node.js you can run:
 
    ```bash
-   python3 -m http.server
+   npx http-server
    ```
 
-   Then visit `http://localhost:8000/index.html`.
+   Then visit `http://localhost:8080/index.html` (or the port shown in the output).
 3. Upload your CSV, choose any date within the desired week, and click **Analyze**.
-4. The app displays each day from Tuesday to Monday and a yellow "WEEK TOTAL" row summarizing the results.
-
-Open `index.html` in a browser to analyze weekly earnings from a CSV file. Upload your `Pending_Payouts.csv`, select a starting date, and click **Analyze** to see the report.
- master
+4. The app displays each day from Tuesday to Monday and a yellow `WEEK TOTAL` row summarizing the results.
