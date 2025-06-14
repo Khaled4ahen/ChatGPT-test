@@ -22,6 +22,10 @@ function formatCurrency(num) {
   return `$${num.toFixed(2)}`;
 }
 
+function formatDateUTC(date) {
+  return date.toISOString().split('T')[0];
+}
+
 
 function parseWorkDate(str) {
   if (!str) return null;
@@ -92,8 +96,8 @@ function ResultsTable({ result }) {
     totals.tasks += d.tasks;
 
     return (
-      <tr key={d.date.toDateString()}>
-        <td>{d.date.toDateString()}</td>
+      <tr key={formatDateUTC(d.date)}>
+        <td>{formatDateUTC(d.date)}</td>
         <td>{formatDuration(d.prepay)}</td>
         <td>{formatDuration(d.overtime)}</td>
         <td>{formatDuration(combined)}</td>
