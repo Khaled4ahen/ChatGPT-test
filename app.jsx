@@ -27,12 +27,16 @@ function formatDateUTC(date) {
 }
 
 
+function sanitizeKey(str) {
+  return String(str).trim().toLowerCase().replace(/[\W_]+/g, '');
+}
+
 function getField(obj, key) {
   if (!obj) return undefined;
   if (obj[key] !== undefined) return obj[key];
-  const target = key.toLowerCase();
+  const target = sanitizeKey(key);
   for (const k in obj) {
-    if (k.trim().toLowerCase() === target) return obj[k];
+    if (sanitizeKey(k) === target) return obj[k];
   }
   return undefined;
 }
@@ -41,23 +45,31 @@ function getField(obj, key) {
 
 function parseWorkDate(str) {
   if (!str) return new Date(NaN);
-  const parts = String(str).trim().split(/[-\/]/);
+  const cleaned = String(str).replace(/,/g, ' ').trim();
+  let d = new Date(cleaned);
+  if (!isNaN(d)) {
+    return new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+  }
+  const parts = cleaned.split(/[-\/\s]+/);
   if (parts.length < 3) return new Date(NaN);
   let [day, mon, year] = parts;
   if (day.length > 2) {
-    // handle year-month-day
     [year, mon, day] = parts;
   }
+  mon = String(mon || '');
   const months = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
   let idx;
   if (/^\d+$/.test(mon)) {
     idx = parseInt(mon, 10) - 1;
-  } else {
+  } else if (mon) {
     idx = months.indexOf(mon.slice(0,3).toLowerCase());
+  } else {
+    return new Date(NaN);
   }
   if (idx < 0 || idx > 11) return new Date(NaN);
   const yr = parseInt(year, 10);
-  const fullYear = yr < 100 ? 2000 + yr : yr;
+  const fullYear = isNaN(yr) ? NaN : (yr < 100 ? 2000 + yr : yr);
+  if (isNaN(fullYear)) return new Date(NaN);
   return new Date(Date.UTC(fullYear, idx, parseInt(day, 10)));
 }
 
@@ -188,6 +200,7 @@ function App() {
       <div id="results">
         <ResultsTable result={result} />
       </div>
+      <footer className="footer">Made with ❤️ by Khaled Shahen</footer>
     </div>
   );
 }
