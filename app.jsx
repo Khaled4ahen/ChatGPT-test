@@ -26,6 +26,7 @@ function formatDateUTC(date) {
   return date.toISOString().split('T')[0];
 }
 
+
 function getField(obj, key) {
   if (!obj) return undefined;
   if (obj[key] !== undefined) return obj[key];
@@ -35,6 +36,7 @@ function getField(obj, key) {
   }
   return undefined;
 }
+
 
 
 function parseWorkDate(str) {
