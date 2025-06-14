@@ -27,12 +27,16 @@ function formatDateUTC(date) {
 }
 
 
+function sanitizeKey(str) {
+  return String(str).trim().toLowerCase().replace(/[\W_]+/g, '');
+}
+
 function getField(obj, key) {
   if (!obj) return undefined;
   if (obj[key] !== undefined) return obj[key];
-  const target = key.toLowerCase();
+  const target = sanitizeKey(key);
   for (const k in obj) {
-    if (k.trim().toLowerCase() === target) return obj[k];
+    if (sanitizeKey(k) === target) return obj[k];
   }
   return undefined;
 }
@@ -41,13 +45,20 @@ function getField(obj, key) {
 
 function parseWorkDate(str) {
   if (!str) return new Date(NaN);
-  const parts = String(str).trim().split(/[-\/\s]+/);
+
+  const cleaned = String(str).replace(/,/g, ' ').trim();
+  let d = new Date(cleaned);
+  if (!isNaN(d)) {
+    return new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+  }
+  const parts = cleaned.split(/[-\/\s]+/);
+
   if (parts.length < 3) return new Date(NaN);
   let [day, mon, year] = parts;
   if (day.length > 2) {
-    // handle year-month-day
     [year, mon, day] = parts;
   }
+  mon = String(mon || '');
   const months = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
   let idx;
   if (/^\d+$/.test(mon)) {
