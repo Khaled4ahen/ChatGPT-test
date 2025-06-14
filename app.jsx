@@ -27,12 +27,16 @@ function formatDateUTC(date) {
 }
 
 
+function sanitizeKey(str) {
+  return String(str).trim().toLowerCase().replace(/[\W_]+/g, '');
+}
+
 function getField(obj, key) {
   if (!obj) return undefined;
   if (obj[key] !== undefined) return obj[key];
-  const target = key.toLowerCase();
+  const target = sanitizeKey(key);
   for (const k in obj) {
-    if (k.trim().toLowerCase() === target) return obj[k];
+    if (sanitizeKey(k) === target) return obj[k];
   }
   return undefined;
 }
