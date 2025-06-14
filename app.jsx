@@ -22,17 +22,32 @@ function formatCurrency(num) {
   return `$${num.toFixed(2)}`;
 }
 
+
+function parseWorkDate(str) {
+  if (!str) return null;
+  const [day, mon, year] = str.split('-');
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const idx = months.findIndex(m => m.toLowerCase() === mon.toLowerCase());
+  if (idx === -1) return new Date(str); // fallback
+  const yr = parseInt(year, 10);
+  const fullYear = yr < 100 ? 2000 + yr : yr;
+  return new Date(Date.UTC(fullYear, idx, parseInt(day, 10)));
+}
+
 function analyze(csvData, startDate) {
-  const start = new Date(startDate);
-  const day = start.getDay();
+  const start = new Date(startDate + 'T00:00:00Z');
+  const day = start.getUTCDay();
   const diff = (day + 7 - 2) % 7; // difference to Tuesday
   const weekStart = new Date(start);
-  weekStart.setDate(start.getDate() - diff);
+  weekStart.setUTCDate(start.getUTCDate() - diff);
+
 
   const days = [];
   for (let i = 0; i < 7; i++) {
     const date = new Date(weekStart);
-    date.setDate(weekStart.getDate() + i);
+
+    date.setUTCDate(weekStart.getUTCDate() + i);
+
     days.push({
       date,
       prepay: 0,
@@ -43,7 +58,10 @@ function analyze(csvData, startDate) {
   }
 
   csvData.forEach(row => {
-    const d = new Date(row.workDate);
+
+    const d = parseWorkDate(row.workDate);
+
+
     const idx = Math.floor((d - weekStart) / (24 * 3600 * 1000));
     if (idx >= 0 && idx < 7) {
       const dayObj = days[idx];
