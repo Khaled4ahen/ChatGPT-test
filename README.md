@@ -24,3 +24,11 @@ The `index.html` page now uses React to analyze weekly earnings from a CSV file.
    Then visit `http://localhost:8080/index.html` (or the port shown in the output).
 3. Upload your CSV, choose any date within the desired week, and click **Analyze**.
 4. The app displays each day from Tuesday to Monday and a yellow `WEEK TOTAL` row summarizing the results.
+
+### Hosting on GitHub Pages
+
+1. Push these files to a repository on GitHub.
+2. Open the repository settings and navigate to **Pages**.
+3. Choose the `main` branch (root folder) as the source and save.
+4. After a few moments your site will be available at
+   `https://<username>.github.io/<repository>/index.html`.
