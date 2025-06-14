@@ -11,6 +11,7 @@ body {
   padding: 20px;
   background: #fff;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-sizing: border-box;
 }
 
 .controls {
@@ -36,6 +37,18 @@ button:hover {
   background-color: #45a049;
 }
 
+h1 {
+  text-align: center;
+  background: linear-gradient(90deg, #4CAF50, #45a049);
+  color: #fff;
+  margin-top: 0;
+  padding: 10px 0;
+}
+
+#results {
+  overflow-x: auto;
+}
+
 #results table {
   width: 100%;
   border-collapse: collapse;
@@ -56,8 +69,20 @@ button:hover {
   font-weight: bold;
 }
 
+.footer {
+  text-align: center;
+  margin-top: 20px;
+  color: #666;
+  font-size: 0.9em;
+}
+
 @media (max-width: 600px) {
   .controls {
     flex-direction: column;
+  }
+
+  #results th,
+  #results td {
+    font-size: 14px;
   }
 }
