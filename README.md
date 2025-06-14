@@ -2,6 +2,8 @@
 
 This repository contains example HTML files.
 
+> **Note**: This project was created by **Khaled Shahen**.
+
 ## Portfolio
 Open `portfolio.html` in a web browser to view the sample portfolio page.
 

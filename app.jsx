@@ -41,7 +41,7 @@ function getField(obj, key) {
 
 function parseWorkDate(str) {
   if (!str) return new Date(NaN);
-  const parts = String(str).trim().split(/[-\/]/);
+  const parts = String(str).trim().split(/[-\/\s]+/);
   if (parts.length < 3) return new Date(NaN);
   let [day, mon, year] = parts;
   if (day.length > 2) {
@@ -52,12 +52,15 @@ function parseWorkDate(str) {
   let idx;
   if (/^\d+$/.test(mon)) {
     idx = parseInt(mon, 10) - 1;
-  } else {
+  } else if (mon) {
     idx = months.indexOf(mon.slice(0,3).toLowerCase());
+  } else {
+    return new Date(NaN);
   }
   if (idx < 0 || idx > 11) return new Date(NaN);
   const yr = parseInt(year, 10);
-  const fullYear = yr < 100 ? 2000 + yr : yr;
+  const fullYear = isNaN(yr) ? NaN : (yr < 100 ? 2000 + yr : yr);
+  if (isNaN(fullYear)) return new Date(NaN);
   return new Date(Date.UTC(fullYear, idx, parseInt(day, 10)));
 }
 
@@ -188,6 +191,7 @@ function App() {
       <div id="results">
         <ResultsTable result={result} />
       </div>
+      <footer className="footer">Made with ❤️ by Khaled Shahen</footer>
     </div>
   );
 }
